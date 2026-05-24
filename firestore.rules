@@ -1,0 +1,123 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128;
+    }
+
+    // Collections
+    match /users/{userId} {
+      allow get, write: if isOwner(userId);
+    }
+
+    match /incomes/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /expenses/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /cashAccounts/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    match /banks/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /onlineAccounts/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /categories/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /loans/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /customers/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /creditTransactions/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /shops/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /bankTransactions/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /persons/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+
+    match /onlineTransactions/{docId} {
+      allow read, write: if isSignedIn() && (
+        (request.method == 'create' && incoming().userId == request.auth.uid) ||
+        (resource != null && resource.data.userId == request.auth.uid)
+      );
+    }
+  }
+}
